@@ -1,4 +1,4 @@
-!IMAGE[MSCyberCoursesResized.png](MSCyberCoursesResized.png)
+![image](.\IMG\MSCyberCoursesResized.png)
 
 # Threats targeting the hybrid & cloud identity platform
 
@@ -13,7 +13,6 @@ The objective for Miss Red will be to test and detect vulnerable configuration a
 A group of people authorized and organized to emulate a potential adversary’s attack or exploitation capabilities against an enterprise’s security posture. The <font style="color:red;">**Red Team**</font>’s objective is to improve enterprise Information Assurance by demonstrating the impacts of successful attacks and by demonstrating what works for the defenders (i.e., the Blue Team) in an operational environment. The group responsible for defending an enterprise’s use of information systems by maintaining its security posture against a group of mock attackers (i.e., the Red Team). Typically, the <font style="color:blue;">**Blue Team**</font> and its supporters must defend against real or simulated attacks […]
 🔗 [Source](https://csrc.nist.gov/glossary/term/red_team_blue_team_approach)
 </details> 
-
 
 ===
 
@@ -57,10 +56,10 @@ Use the following credentials:
     |||
     |:--------|:--------|
     | Username | `CONTOSO\lee.mendoza.adm` |
-    | Password | `NeverTrustAny1!` |
+    | Password | Please type the password |
     
 
-1. [] Right click on the Start menu !IMAGE[2022menu.png](2022menu.png) and click on **Run**.
+1. [] Right click on the Start menu ![image](.\IMG\2022menu.png) and click on **Run**.
 1. [] In the **Run** window, type `\\DC01\SYSVOL` and click **OK**.
 
     📝 What types of files can we find in this folder?
@@ -73,10 +72,10 @@ Use the following credentials:
     |||
     |:--------|:--------|
     | Username | `CONTOSO\v.fergusson.adm` |
-    | Password | `NeverTrustAny1!` |
+    | Password | Please type the password |
     
 
-1. [] Right click on the Start menu !IMAGE[2022menu.png](2022menu.png) and click on **Run**.
+1. [] Right click on the Start menu ![image](.\IMG\2022menu.png) and click on **Run**.
 1. [] In the **Run** window, type `\\DC01\C$` and click **OK**.
 
 This will open an explorer window and will maintain an SMB connection between DC02 and SRV01. Leave it open like this and carry on. 
@@ -93,10 +92,10 @@ Hello <font style="color:red;">**Miss Red**</font>! In this exercise you will us
     |||
     |:--------|:--------|
     | Username | `CONTOSO\red` |
-    | Password | `NeverTrustAny1!` |
+    | Password | Please type the password |
     
 
-1. [] Right click on the Start menu !IMAGE[11menu.png](11menu.png) and click on **Windows Terminal (Admin)**.
+1. [] Right click on the Start menu ![image](.\IMG\11menu.png) and click on **Windows Terminal (Admin)**.
 
 1. [] Change the current directory by typing `cd \Tools\Scripts` and hit **Enter**.
 
@@ -132,15 +131,15 @@ Hello <font style="color:red;">**Miss Red**</font>! In this exercise you will us
     | Neo4j Username | `neo4j` |
     | Neo4j Password | `NeverTrustAny1!` |
 
-1. [] You are welcomed with a message telling you there's nothing in the database. Well, let's change that and import the zip files you have created. Click on the **Upload Data** button on the right side !IMAGE[BH1.png](BH1.png). Navigate to the `C:\Tools\Script` folder, select the first zip file and click **Open**. The import should take a few seconds. 
+1. [] You are welcomed with a message telling you there's nothing in the database. Well, let's change that and import the zip files you have created. Click on the **Upload Data** button on the right side ![image](.\IMG\BH1.png). Navigate to the `C:\Tools\Script` folder, select the first zip file and click **Open**. The import should take a few seconds. 
 
 1. [] Click on the **Upload Data** button again and select the second zip file and click **Open**. Then click the small white X next to the popup title **Upload Progress**.
 
-1. [] Click the burger menu on the top left corner !IMAGE[BH2.png](BH2.png) then click on the **Analysis** tab. Scroll down to the **Shortest Paths** section and click **Find Shortest Path do Domain Admins**. In the popup, click on **DOMAIN ADMIN@CONTOSO.COM**.
+1. [] Click the burger menu on the top left corner ![image](.\IMG\BH2.png) then click on the **Analysis** tab. Scroll down to the **Shortest Paths** section and click **Find Shortest Path do Domain Admins**. In the popup, click on **DOMAIN ADMIN@CONTOSO.COM**.
 
     You should see something like this:
 
-    !IMAGE[BH3.png](BH3.png)
+    ![image](.\IMG\BH3.png)
 
     Spend some time exploring the graph. Note the different types of edges. Some of them were obtained by performing LDAP queries:
     - MemberOf
@@ -158,7 +157,7 @@ Hello <font style="color:red;">**Miss Red**</font>! In this exercise you will us
 
     You should see something like this:
 
-    !IMAGE[BH4.png](BH4.png)
+    ![image](.\IMG\BH4.png)
     
     This time you can see another type of edge collected by a SAM-R enumeration:
     - CanRDP
@@ -172,8 +171,121 @@ You are now sharing your findings with <font style="color:blue;">**Mister Blue**
 
 ===
 
-## Exercise 3 - Enumerate domain users and group anonymously 
-Hello <font style="color:red;">**Miss Red**</font>! Your collegue and almost nemessis by now <font style="color:blue;">**Mister Blue**</font> is hardening the environment based on your input. Let's show him that you can do even better )or worse) than BloodHound and let's gather intel without using an account.
+## Exercise 3 - Enable LDAP logging
+
+Hello <font style="color:blue;">**Mister Blue**</font>! You just received some nice screenshots of identified paths to get to your admins. That was clearly too easy to get that data. You are already working at reducing the number of domain admins to the strict minimum. And you will soon be deploying Microsoft Defender for Identity... But what can you do in the meantime to get some visibility on what is happening? Well, let's enable LDAP logging to see what it looks like.
+
+In this Exercise you will enable logging on your domain controllers to start seeing when SharpHound is used.  
+
+### Task 1 - Enable LDAP logging on DC01
+
+1. [] Log on to **@lab.VirtualMachine(DC01).SelectLink**. Use the following credentials:
+    |||
+    |:--------|:--------|
+    | Username | `CONTOSO\blue` |
+    | Password | Please type the password |
+
+1. [] Right click on the Start menu ![image](.\IMG\2022menu.png) and click on **Run**.
+
+1. [] In the **Run** window, type `regedit` and click **OK**.
+
+1. [] In the **Registry Editor**, navigate to **HKEY_LOCAL_MACHINE** > **SYSTEM** > **CurrentControlSet** > **Services** > **NTDS** > **Diagnostics**. Locate the value **15 Field Engineering**, double click on it, set it to `5` and click **OK**.
+
+    📝 What is the default value of all diagnostics configurations? 
+
+1. [] Now, navigate to **HKEY_LOCAL_MACHINE** > **SYSTEM** > **CurrentControlSet** > **Services** > **NTDS** > **Parameters**. In this location, create the following DWORD values:
+
+    |Value|Type|Data|
+    |:--------:|:--------:|:--------:|
+    | `Expensive Search Results Threshold` |REG_DWORD| `1` |
+    | `Inefficient Search Results Threshold` |REG_DWORD| `1` |
+    | `Search Time Threshold (msecs)` |REG_DWORD| `1` |
+
+    It should look like this:
+    ![image](.\IMG\LDAPREG1.png)
+
+1. [] Let's open the logs, right click on the Start menu ![image](.\IMG\2022menu.png) and click on **Event Viewer**.
+
+1. [] In the **Event Viewer**, navigate **Event Viewer (Local)** > **Applications and Services Logs** > **Directory Service**.
+
+Now we are going to ask <font style="color:red;">**Miss Red**</font> to run SharpHound again to see what we can log.
+
+### Task 2 - Run SharpHound again
+
+1. [] Go back to **@lab.VirtualMachine(CLI01).SelectLink**. You should still be logged in the following credentials:
+    |||
+    |:--------|:--------|
+    | Username | `CONTOSO\red` |
+    | Password | Please type the password |
+    
+
+1. [] If you closed the terminal before, reopen it. Right click on the Start menu ![image](.\IMG\11menu.png) and click on **Windows Terminal (Admin)**.
+
+1. [] Make sure the current directory is `C:\Tools\Scripts`.
+
+1. [] Run **SharpHound** by executing `.\sharphound.exe --collectionmethods All`.
+
+### Task 3 - View the LDAP logs
+
+1. [] Go back on to **@lab.VirtualMachine(DC01).SelectLink** with the following credentials:
+    |||
+    |:--------|:--------|
+    | Username | `CONTOSO\blue` |
+    | Password | Please type the password |
+
+1. [] In the **Event Viewer**, you should still be in **Event Viewer (Local)** > **Applications and Services Logs** > **Directory Service**. In the **Actions** pane, click **Refresh**.
+
+    You should see a lot of **1644** events corresponding to SharpHound execution (CLI01's IP address is 192.168.1.31). For example:
+    ![image](.\IMG\1664.png)
+
+    >[!knowledge] Although your lab is pretty quiet, you can see the ton of events it has generated. This is why this solution doesn't scale well on large environment and might affect the overall performance of domain controllers. You will need a SIEM to collect and parse this. Also note the maximum size of the Directory Service event log by default. Right click on the name of the eventlog in the console tree and click **Properties**. You see that the default size is **1,028Kb**. You should consider make it larger, probably something like 1Gb as long as you have enough space on the disk.
+
+    You have configured it on DC01 only. SharpHound can very well use DC02. So to enable this type of logging consistently accross all domain controllers, it is better to use a group policy. We will skip that for now.
+  
+===
+
+## Exercise 4 - Restrict SAM-R enumeration on a member server
+
+Dear <font style="color:blue;">**Mister Blue**</font>. In the data <font style="color:red;">**Miss Red**</font> shared with you, you could see paths such as **CanRDP** to **SRV01**. This means that your member server is not protected against remote SAM enumeration. That's odd because **SRV01** is running Windows Server 2022 and by default only the members of the local adminstrators group can perform this type of enumeration and Red's account isn't a part of it. Maybe someone messed with the default configuration, that would not be the first time... Let's fix this!
+
+### Task 1 - Confirm local group membership
+
+1. [] Log on to **@lab.VirtualMachine(SRV01).SelectLink**. Use the following credentials:
+    |||
+    |:--------|:--------|
+    | Username | `CONTOSO\blue` |
+    | Password | Please type the password |
+
+    You can use the **Switch User** button on the bottom if necessary. 
+
+1. [] Right click on the Start menu ![image](.\IMG\2022menu.png) and click on **Run**.
+
+1. [] In the **Run** window, type `cmd` and click **OK**.
+
+1. [] In the command prompt window, type `net localgroup "Remote Desktop Users"` and hit **Enter**.
+
+    📝 Who is a member of the group? 
+
+### Task 2 - Correct SRV01 SAM-R configuration 
+
+1. [] Still on **@lab.VirtualMachine(SRV01).SelectLink**, right click on the Start menu ![image](.\IMG\2022menu.png) and click on **Run**.
+
+1. [] In the **Run** window, type `gpedit.msc` and click **OK**.
+
+1. [] In the **Local Group Policy Editor** window, navigate to **Local Computer Policy** > **Computer Configuration** > **Windows Settings** > **Security Settings** > **Local Policies** > **Security Options**. Double click on the **Policy** called **Network access: Restrict clients allowed to make remote calls to SAM**. Click on **Edit Security...** and note the current security principals.
+
+    This is not the default configuration for Windows Server 2022. Starting Windows Server 2016, only the local Administrators group should be here (when the setting isn't configured, the default applies). 
+
+1. [] Select **Authenticated Users**, then click **Remove** and **OK**.
+
+    >[!knowledge] It might be a good idea to consider using a group policy to enforce the default settings.
+
+    📝 Why is using a group policy recommended to use a group policy for these settings?
+
+===
+
+## Exercise 5 - Enumerate domain users and group anonymously
+Hello <font style="color:red;">**Miss Red**</font>! Your collegue and almost nemessis by now <font style="color:blue;">**Mister Blue**</font> is hardening the environment based on your input. Let's show him thatou can do even better )or worse) than BloodHound and let's gather intel without using an account.
 
 ### Task 1 - Use anonymous SAM-R enumeration
 
@@ -181,11 +293,11 @@ Hello <font style="color:red;">**Miss Red**</font>! Your collegue and almost nem
     |||
     |:--------|:--------|
     | Username | `CONTOSO\red` |
-    | Password | `NeverTrustAny1!` |
+    | Password | Please type the password |
     
-1. [] If you don't have a **Windows Terminal** already opened, open a new one by right clicking on the Start menu !IMAGE[11menu.png](11menu.png) and clicking on **Windows Terminal (Admin)**. Else you can use an existing one.
+1. [] If you don't have a **Windows Terminal** already opened, open a new one by right clicking on the Start menu ![image](.\IMG\11menu.png) and clicking on **Windows Terminal (Admin)**. Else you can use an existing one.
 
-1. [] In the terminal, open a new tab by clicking on the chevron and selecting **Command Prompt** like shown in this screenshot:  !IMAGE[TERM1.png](TERM1.png)
+1. [] In the terminal, open a new tab by clicking on the chevron and selecting **Command Prompt** like shown in this screenshot:  ![image](.\IMG\TERM1.png)
 
 1. [] In this new tab, run the following command `nmap --script smb-enum-users -p 445 DC01`. This is essentially doing a SAM-R call and as you can see, we did not specify a user.
 
@@ -199,9 +311,9 @@ You send the output to <font style="color:blue;">**Mister Blue**</font> with a n
     |||
     |:--------|:--------|
     | Username | `CONTOSO\blue` |
-    | Password | `NeverTrustAny1!` |
+    | Password | Please type the password |
 
-1. [] Right click on the Start menu !IMAGE[2022menu.png](2022menu.png) and click on **Run**.
+1. [] Right click on the Start menu ![image](.\IMG\2022menu.png) and click on **Run**.
 
 1. [] In the **Run** window, type `dsa.msc` and click **OK**.
 
@@ -213,7 +325,7 @@ You send the output to <font style="color:blue;">**Mister Blue**</font> with a n
 
 1. [] Select **ANONYMOUS LOGON**, click **Remove** and **OK**. If there is a confirmation popup, confirm by clicking **Yes**. 
 
-1. [] Right click on the Start menu !IMAGE[2022menu.png](2022menu.png) and click on **Run**.
+1. [] Right click on the Start menu ![image](.\IMG\2022menu.png) and click on **Run**.
 
 1. [] In the **Run** window, type `services.msc` and click **OK**.
 
@@ -225,11 +337,81 @@ You send the output to <font style="color:blue;">**Mister Blue**</font> with a n
     |||
     |:--------|:--------|
     | Username | `CONTOSO\red` |
-    | Password | `NeverTrustAny1!` |
+    | Password | Please type the password |
     
 1. [] In the command prompt tab, run the following command `nmap --script smb-enum-users -p 445 DC01 -d`. 
 
     📝 What is the error message?
+
+===
+
+## Exercise 6 - Restrict SMB enumeration [optional]
+
+My dear <font style="color:blue;">**Mister Blue**</font>. In the data <font style="color:red;">**Miss Red**</font> shared with you, you could see paths such as **HasSession** which were telling you where users were connected from. This was made possible because of SMB enumerations. Well good news, that's an easy fix.
+
+### Task 1 - Check SMB enumeration again
+
+SMB enumeration has very volatile output. Users and machines aren't always connected to domain controllers and attackers have to run it multiple times. Last time <font style="color:red;">**Miss Red**</font> ran it as a part of SharpHound. This time, let's isolate the test.
+
+1. [] Log on to **@lab.VirtualMachine(CLI01).SelectLink**. Use the following credentials:
+    |||
+    |:--------|:--------|
+    | Username | `CONTOSO\red` |
+    | Password | Please type the password |
+
+
+1. [] If you don't have a **Windows Terminal** already opened, open a new one by right clicking on the Start menu ![image](.\IMG\11menu.png) and clicking on **Windows Terminal (Admin)**. Else you can use an existing one.
+
+1. [] In the terminal, make sure you are in a PowerShell tab and in the directory **C:\Tools\Scripts**. Run the following script `.\Invoke-NetSessionEnum.ps1 -Hostname DC01`
+    The output should look like this:
+    ![image](.\IMG\NETSESSION1.png)
+    If you do not see Lee Mendoza's connection, you can log back in **@lab.VirtualMachine(SRV01).SelectLink** with Lee's account and refresh the Explorer window connected to `\\DC01\SYSVOL`.
+
+### Task 2 - Restrict SMB Enumeration with NetCease
+
+Now that you have the confirmation it is open, let's restrict it.
+
+1. [] Log on to **@lab.VirtualMachine(DC01).SelectLink**. Use the following credentials:
+    |||
+    |:--------|:--------|
+    | Username | `CONTOSO\blue` |
+    | Password | Please type the password |
+
+1. [] Right click on the Start menu ![image](.\IMG\2022menu.png) and click on **Run**.
+
+1. [] In the **Run** window, type `powershell` and click **OK**.
+
+1. [] In the PowerShell prompt, run the following cmdLet `Get-Command -Module NetCease` and note the output.
+
+    >[!knowledge] The module was pre-installed in the lab. If you want to install it on another machine, you can use the cmdLet `Install-Module NetCease`.
+
+1. [] In the same prompt, run the following cmdLet `Get-NetSessionEnumPermission | Out-GridView -Title "SMB permissions"` and note the output. You should see the **NT AUTHORITY\Authentication Users** security principal. That explains why Red's account, although she isn't a privileged account can enumerate sessions. You need to remove **Authenticated Users**. Close the **SMB Permissions** window.
+
+    📝 Try to run the previous command without the "| Out-GridView -Title "SMB permissions". What is the difference?
+
+1. [] In the same prompt, run the following cmdLet `Set-NetSessionEnumPermission` and then run `Get-NetSessionEnumPermission | Out-GridView -Title "SMB permissions"`. You should see the difference.
+>Note: If you have an error maybe it's a problem with how you execute the PowerShell! Try to run it as administrator.
+
+1. [] Right click on the Start menu ![image](.\IMG\2022menu.png) and click on **Run**.
+
+1. [] In the **Run** window, type `services.msc` and click **OK**.
+
+1. [] In the **Services** console, right click on the **Server** service and click **Restart**. A pop-up will ask you if you want to restart the dependencies, click **Yes**.
+
+    >[!knowledge] In a production environment, you can't just restart those services at any time, you'll need to plan that carefully to avoid application outages. 
+
+
+### Task 3 - Check SMB enumeration one last time
+
+1. [] Log back on to **@lab.VirtualMachine(CLI01).SelectLink** using the following credentials:
+    |||
+    |:--------|:--------|
+    | Username | `CONTOSO\red` |
+    | Password | Please type the password |
+
+1. [] In the terminal, run the following script `.\Invoke-NetSessionEnum.ps1 -Hostname DC01`. 
+
+    📝 Do you still see connections?
 
 ===
 
