@@ -56,3 +56,5 @@ Please follow the steps outlined in the [requirements notebook](/exercices/requi
 * :muscle: [Confidential VM Attestation Deepdive](exercices/cvm_attestation_deepdive.md) - Fetching and verifying a raw sev-snp report
 * :muscle: [Confidential ACI](exercices/confidential_containers_cce.md) - Deploying a confidential container on ACI.
 * :muscle: [Confidential ACI Deepdive](exercices/confidential_containers_deepdive_cce.ipynb) - Checking CCE policy enforcement on ACI.
+* :muscle: [Confidential ACI Attestation Deepdive](exercices/confidential_containers_attestation_deepdive.md) - Verifying sev-snp report using virtee/sevtool
+
