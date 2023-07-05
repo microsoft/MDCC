@@ -40,7 +40,7 @@ Below we list all the requirements for this workshop. Be sure to set up everythi
 
 #### 1️⃣ Installation Requirements
 
-Please follow the steps outlined in the [requirements notebook](/exercices/requirements.ipynb) to set up your environment, which includes:
+Please follow the steps outlined in the [requirements notebook](exercices/requirements.md) to set up your environment, which includes:
 
 * Installing [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) on Windows.
 * Installing [Visual Studio Code](https://code.visualstudio.com/download).
